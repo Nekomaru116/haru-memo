@@ -44,7 +44,7 @@
 
 ## AI協働開発について
 
-このプロジェクトは **Claude AI との協働**により開発されました。
+このプロジェクトは **Claude, Gemini との協働**により開発されました。
 
 - **設計・統合**: 開発者
 - **コーディング**: Claude AI の支援 + 開発者
@@ -60,8 +60,8 @@ AI生成コードが含まれているため、**著作権を主張せず**、�
 
 ## 謝辞
 
-- [React](https://reactjs.org/) - UIライブラリ
-- [Konva.js](https://konvajs.org/) - 描画エンジン
-- [Dexie](https://dexie.org/) - IndexedDBラッパー
-- [Vite](https://vitejs.dev/) - 高速ビルドツール
-- [Claude AI](https://claude.ai/) - 開発支援パートナー
+- [React](https://reactjs.org/)
+- [Konva.js](https://konvajs.org/)
+- [Dexie](https://dexie.org/)
+- [Vite](https://vitejs.dev/)
+- [Claude AI](https://claude.ai/)
