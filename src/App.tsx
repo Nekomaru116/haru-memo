@@ -4,7 +4,6 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Stage, Layer, Line } from 'react-konva';
 import {db} from './db/database.ts'
 
-
 // Components (統合後のコンポーネントを使用)
 import FloatingHeader from './components/FloatingHeader';
 import FloatingFooter from './components/FloatingFooter';
@@ -29,6 +28,7 @@ import type { AppMode } from './types';
 //import { NotesService } from './db/database';
 import WhiteboardGridView from './components/WhiteboardGridView.tsx';
 import LicenseNotices from './components/LicenseNotices.tsx';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 function App() {
   // アプリケーション状態
@@ -874,6 +874,7 @@ if (showBoardSelector) {
       )}
       </>
     )}
+    <SpeedInsights/>
     </div>
   );
 }

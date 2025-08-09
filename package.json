@@ -20,6 +20,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@vercel/speed-insights": "^1.2.0",
     "dexie": "^4.0.11",
     "konva": "^9.3.22",
     "lucide-react": "^0.536.0",
