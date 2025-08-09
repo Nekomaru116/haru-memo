@@ -304,7 +304,7 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
-                onClick={() => window.open('https://github.com', '_blank')}
+                onClick={() => window.open('https://x.com/NekomaruSanDesu', '_blank')}
               >
                 <Twitter size={16} />
                 X
