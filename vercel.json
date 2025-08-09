@@ -57,7 +57,7 @@
       ]
     },
     {
-      "source": "/workbox-*.js",
+      "source": "/workbox-(.+).js",
       "headers": [
         {
           "key": "Content-Type",
