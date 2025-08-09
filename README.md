@@ -1,69 +1,67 @@
-# React + TypeScript + Vite
+# 【はるメモ】
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+付箋と描画でアイデアを逃さない、アイデア前駆体収集器
 
-Currently, two official plugins are available:
+## ●特徴
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **速攻メモ**: 思いついたアイデアをすぐに付箋として記録、アイデアの鮮度を保ちます
+- **自由描画**: ペンツールで手描きの図解やメモを追加
+- **PWA対応**: スマートフォン・PC・タブレットにアプリとしてインストール可能
+- **マルチボード**: 複数のホワイトボードで用途別に整理
+- **検索機能**: 大量のメモから素早く目的のものを発見
+- **自動保存**: ブラウザのローカルストレージで確実にデータを保存
 
-## Expanding the ESLint configuration
+## 🚀 デモ
+[**はるメモを使ってみる**](https://haru-memo.vercel.app)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📱 対応プラットフォーム
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| プラットフォーム | 対応状況 | PWAインストール |
+|----------------|---------|----------------|
+| 📱 iOS (Safari) | ✅ | ✅ |
+| 🤖 Android (Chrome) | ✅ | ✅ |
+| 💻 Windows/Mac (Chrome/Edge) | ✅ | ✅ |
+| 🖥️ Linux (Firefox/Chrome) | ✅ | ✅ |
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🛠️ 技術スタック
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **フロントエンド**: React 19, TypeScript
+- **ビルドツール**: Vite 7
+- **PWA**: vite-plugin-pwa, Workbox
+- **データベース**: Dexie (IndexedDB)
+- **描画エンジン**: Konva.js, React-Konva
+- **UI**: Lucide React Icons
+- **デプロイ**: Vercel
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 使用例
+
+- **やること整理**: たまったタスクの整理と進捗管理
+- **ブレインストーミング**: アイデア出しと整理
+- **デザイン下描き**: 簡単なワイヤーフレーム作成
+
+
+## AI協働開発について
+
+このプロジェクトは **Claude AI との協働**により開発されました。
+
+- **設計・統合**: 開発者
+- **コーディング**: Claude AI の支援 + 開発者
+- **最適化・デバッグ**: 開発者 + AI協働
+
+AI生成コードが含まれているため、**著作権を主張せず**、完全に自由に利用できるよう公開しています。
+
+
+## ライセンス
+
+**パブリックドメイン** - このプロジェクトは著作権を放棄し、誰でも自由に利用・改変・商用利用できます。
+
+
+## 謝辞
+
+- [React](https://reactjs.org/) - UIライブラリ
+- [Konva.js](https://konvajs.org/) - 描画エンジン
+- [Dexie](https://dexie.org/) - IndexedDBラッパー
+- [Vite](https://vitejs.dev/) - 高速ビルドツール
+- [Claude AI](https://claude.ai/) - 開発支援パートナー
