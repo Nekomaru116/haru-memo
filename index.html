@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <!---
+            <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+      style-src 'self' 'unsafe-inline';
+      connect-src 'self';
+      img-src 'self' data: blob:;
+      font-src 'self' https://cdnjs.cloudflare.com;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'none';
+    ">
+  -->
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>はるメモ - アイデア前駆体収集器</title>
+    
+    <!-- PWA対応 -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- iOS Safari の追加設定 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="はるメモ">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    
+    <!-- Android Chrome の追加設定 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content=#fcfbe4ff>
+    
+    <!-- PWAインストール促進用 -->
+    <meta name="description" content="付箋と描画による素早いメモで、アイデアを逃さないホワイトボードアプリ">
+    
+    <style>
+      /* iOS Safari でのズーム防止 */
+      input, textarea, select {
+        font-size: 16px !important;
+      }
+
+      /* ピンチズーム完全無効化 */
+      * {
+        touch-action: pan-x pan-y;
+      }
+
+      /* 選択テキストの無効化（誤操作防止） */
+      body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* テキスト入力要素のみ選択可能 */
+      input, textarea {
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+      }
+
+      /* モバイル最適化のCSS追加 */
+      canvas {
+        transform: translateZ(0);
+        will-change: transform;
+        touch-action: none;
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+      }
+
+      /* メモリ使用量の削減 */
+      * {
+        transform: translateZ(0);
+      }
+
+      /* PWAスプラッシュスクリーン風の初期ローディング */
+      .pwa-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /*background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
+background-color:hsla(0,0%,100%,1);
+background-image:
+radial-gradient(at 93% 19%, hsla(189,100%,70%,1) 0px, transparent 50%),
+radial-gradient(at 53% 76%, hsla(323,100%,93%,1) 0px, transparent 50%),
+radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%),
+radial-gradient(at 80% 100%, hsla(240,100%,79%,1) 0px, transparent 50%),
+radial-gradient(at 0% 0%, hsla(340,93%,89%,1) 0px, transparent 50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        z-index: 9999;
+      }
+
+      .pwa-loading h1 {
+        font-size: 24px;
+        margin: 0 0 16px 0;
+      }
+
+      .pwa-loading .loading-dots {
+        font-size: 32px;
+        animation: loading 1.5s infinite;
+      }
+
+      @keyframes loading {
+        0%, 20% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        80%, 100% { transform: scale(1); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- PWA初期ローディング画面 -->
+    <div id="pwa-loading" class="pwa-loading">
+      <h1>はるメモ</h1>
+      <h3>- アイデア前駆体収集器 -</h3>
+      <p><div class="loading-dots">...</div></p>
+    </div>
+    
+    <div id="root"></div>
+    
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- 簡略版サービスワーカー登録 -->
+    <script>
+      /*
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('✅ PWA: サービスワーカー登録成功', registration);
+            })
+            .catch((error) => {
+              console.log('❌ PWA: サービスワーカー登録失敗', error);
+            });
+        });
+      }
+      */
+      // ローディング画面を隠す
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const loading = document.getElementById('pwa-loading');
+          if (loading) {
+            loading.style.opacity = '0';
+            setTimeout(() => loading.remove(), 300);
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

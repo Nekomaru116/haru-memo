@@ -1,0 +1,49 @@
+/* アプリ全体のスタイル */
+.App {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* スマホでのスクロール防止 */
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* キャンバスコンテナ */
+.canvas-container {
+  background-color: #f8f9fa;
+  width: 100%;
+  height: calc(100vh - 80px);
+  position: relative;
+  /* タッチスクロール無効化 */
+  touch-action: none;
+}
+
+/* 基本的なリセット */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+    /* スマホでのスクロール防止 */
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
+  touch-action: none;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}

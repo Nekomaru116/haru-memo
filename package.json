@@ -1,0 +1,47 @@
+{
+  "name": "haru-memo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "思い付きを逃さない、アイデア前駆体収集器",
+  "homepage": "https://haru-memo.app",
+  "author": "ｵﾃﾃﾔﾜﾗｶｶﾆ",
+  "license": "CC0-1.0",
+  "scripts": {
+    "dev": "vite",
+    "dev:https": "vite --https",
+    "dev:pwa": "vite --https --host",
+    "build": "tsc -b && vite build",
+    "build:pwa": "tsc -b && vite build --mode production",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "preview:https": "vite preview --https",
+    "clean": "tsc -b --clean",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dexie": "^4.0.11",
+    "konva": "^9.3.22",
+    "lucide-react": "^0.536.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-konva": "^19.0.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "eslint": "^9.30.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.35.1",
+    "vite": "^7.0.4",
+    "vite-plugin-pwa": "^0.21.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
