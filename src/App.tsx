@@ -29,6 +29,7 @@ import type { AppMode } from './types';
 import WhiteboardGridView from './components/WhiteboardGridView.tsx';
 import LicenseNotices from './components/LicenseNotices.tsx';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   // アプリケーション状態
@@ -874,6 +875,7 @@ if (showBoardSelector) {
       )}
       </>
     )}
+    <Analytics />
     <SpeedInsights/>
     </div>
   );
