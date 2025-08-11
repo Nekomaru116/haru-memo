@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AppIcon from './AppIcon';
-import { X, Download, Smartphone, Monitor, Share, Expand, Wind, WifiOff, Laugh, SquarePlus, Grid2X2Plus } from 'lucide-react';
+import { X, Download, Monitor, Share, Expand, Wind, WifiOff, Laugh, SquarePlus, Grid2X2Plus, EllipsisVerticalIcon } from 'lucide-react';
 
 /**
  * @interface PWAInstallDialogProps
@@ -137,7 +137,7 @@ const PWAInstallDialog: React.FC<PWAInstallDialogProps> = ({
       { 
         step: 3, 
         icon: <Download size={24} />, 
-        title: 'インストール完了', 
+        title: '完了！', 
         description: '「追加」ボタンをタップして完了です', 
         image: '/screenshots/ios-step3.png' 
       }
@@ -146,21 +146,28 @@ const PWAInstallDialog: React.FC<PWAInstallDialogProps> = ({
     return [
       { 
         step: 1, 
-        icon: <Download size={24} />, 
-        title: 'インストールボタン', 
+        icon: <EllipsisVerticalIcon size={24} />, 
+        title: 'メニューを開く', 
         description: (
           <span>
-            ブラウザのアドレスバーに表示される「インストール」ボタン（<Download size={16} style={{ display: 'inline', verticalAlign: 'middle' }} />）をタップ
+            Chromeの右上にある（<EllipsisVerticalIcon size={16} style={{ display: 'inline', verticalAlign: 'middle' }} />）をタップ
           </span>
         ), 
         image: '/screenshots/android-step1.png' 
       },
       { 
         step: 2, 
-        icon: <Smartphone size={24} />, 
-        title: 'インストール確認', 
-        description: '「インストール」ダイアログで「インストール」をタップ', 
+        icon: <SquarePlus size={24} />, 
+        title: 'ホーム画面に追加', 
+        description: 'メニューから「ホーム画面に追加」をタップ', 
         image: '/screenshots/android-step2.png' 
+      },
+      {
+        step: 3,
+        icon: <Download size = {24} />,
+        title: '完了！',
+        description: 'インストールをタップして完了です',
+        image: '/screenshots/android-step3.png'
       }
     ];
   } else {
