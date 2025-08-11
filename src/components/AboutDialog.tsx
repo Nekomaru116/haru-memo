@@ -328,7 +328,7 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 onClick={() => window.open('https://github.com/Nekomaru116/haru-memo', '_blank')}
               >
                 <Github size={16} />
-                GitHubへ
+                GitHub
               </button>
             </div>
           </div>
