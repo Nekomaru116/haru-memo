@@ -240,10 +240,11 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
               fontSize: '14px'
             }}>
               <Heart size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
-              作成者: ｵﾃﾃﾔﾜﾗｶｶﾆ & Claude
+              作成者: ｵﾃﾃﾔﾜﾗｶｶﾆ
             </p>
             
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '12px'}}>
               <button
                 onClick={onShowTerms} // 🔧 修正：親コンポーネントのコールバックを呼び出し
                 style={{
@@ -288,6 +289,8 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 ライセンス
               </button>
               
+              {/*ボタン二行目 */}
+              <div style={{ display: 'flex', gap: '12px'}}>
               <button
                 style={{
                   display: 'flex',
@@ -330,6 +333,8 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 <Github size={16} />
                 GitHub
               </button>
+              </div>
+            </div>
             </div>
           </div>
         </div>
