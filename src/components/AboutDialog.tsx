@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import AppIcon from './AppIcon'
-import { X, Heart, Twitter, CodeXml, BookAlert, Download, ScrollText } from 'lucide-react';
+import { X, Heart, Twitter, CodeXml, Download, ScrollText } from 'lucide-react';
 // LicenseNotices のインポートを削除
 
 interface AboutDialogProps {
