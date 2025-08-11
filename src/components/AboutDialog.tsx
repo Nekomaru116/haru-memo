@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import AppIcon from './AppIcon'
-import { X, Heart, Twitter, CodeXml, Download, ScrollText } from 'lucide-react';
+import { X, Heart, Twitter, CodeXml, Download, ScrollText, Github } from 'lucide-react';
 // LicenseNotices のインポートを削除
 
 interface AboutDialogProps {
@@ -308,6 +308,27 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
               >
                 <Twitter size={16} />
                 X
+              </button>
+              <button
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '8px 16px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '8px',
+                  background: 'white',
+                  color: '#555',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
+                onClick={() => window.open('https://github.com/Nekomaru116/haru-memo', '_blank')}
+              >
+                <Github size={16} />
+                GitHub
               </button>
             </div>
           </div>
