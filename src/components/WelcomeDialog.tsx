@@ -167,10 +167,10 @@ const WelcomeDialog: React.FC<WelcomeDialogProps> = ({
               }}
             >
              <div style={{ color: '#856404', margin: '0 0 5 0', fontSize: '14px' }}>
-              <p style={{ margin: 1 }}>●アプリの利用開始前に利用規約に同意してください。</p>
-              <p style={{ margin: 1 }}>●このアプリは学習目的で開発されました。データの破損や消滅による損害への責任は負いかねます。</p>
-              <p style={{ margin: 1 }}>●私的利用のみに限られます。</p>
-              <p style={{ margin: 1 }}>●あなたが作成したすべてのデータは、利用している端末内にのみ保存されます。運営者はあなたの大切なアイデアたちを覗き見たり、外部に送信することはありません。</p>
+              <p style={{ margin: 1 }}>○このアプリは学習目的で開発されました。データの破損や消滅による損害への責任は負いかねます。</p>
+              <p style={{ margin: 1 }}>●ブラウザのキャッシュ削除やアンインストールでデータが消失します。ご注意ください。</p>
+              <p style={{ margin: 1 }}>○あなたが作成したすべてのデータは、利用している端末内にのみ保存されます。運営者はあなたの大切なアイデアたちを覗き見たり、外部に送信することはありません。</p>
+              <p style={{ margin: 1 }}>●アプリの利用開始前に利用規約に同意してください。また、利用規約はアプリ内の「このアプリについて」からも確認できます。</p>
             </div>
             </p>
           </div>
@@ -256,7 +256,7 @@ const WelcomeDialog: React.FC<WelcomeDialogProps> = ({
                 e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
               }}
             >
-              同意して始める
+              使ってみる
             </button>
           </div>
 

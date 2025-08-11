@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import AppIcon from './AppIcon'
-import { X, Heart, Twitter, CodeXml, BookAlert, Download } from 'lucide-react';
+import { X, Heart, Twitter, CodeXml, Download, ScrollText } from 'lucide-react';
 // LicenseNotices のインポートを削除
 
 interface AboutDialogProps {
@@ -262,7 +262,7 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
               >
-                <BookAlert size ={16} />
+                <ScrollText size ={16} />
                 規約
               </button>
               {/* 🔧 修正：ライセンスボタンを独立した動作に変更 */}
