@@ -2,57 +2,51 @@
 
 import React from 'react';
 import { X, ChevronDown } from 'lucide-react';
+import releasesData from '../data/releases.json';
+import type { ReleaseNoteWithNew } from '../types/releases';
 
-interface ReleaseNote {
-  version: string;
-  date: string;
-  changes: string[];
-  isNew?: boolean;
-}
 
 interface ReleaseNotesDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// リリースノートデータ（実際の運用では外部ファイルや設定から読み込み）
-const RELEASE_NOTES: ReleaseNote[] = [
-  {
-    version: "v1.2.0",
-    date: "2025-08-13",
-    changes: [
-      "リリースノート機能を追加",
-      "ハンバーガーメニューに「お知らせ」ボタンを追加",
-      "アップデート通知機能を実装"
-    ],
-    isNew: true
-  },
-  {
-    version: "v1.1.0", 
-    date: "2025-08-01",
-    changes: [
-      "検索機能の改善",
-      "UI/UXの向上",
-      "バグ修正"
-    ]
-  },
-  {
-    version: "v1.0.0",
-    date: "2025-07-15", 
-    changes: [
-      "初回リリース",
-      "基本的な付箋機能",
-      "描画機能",
-      "マルチボード機能"
-    ]
+// リリースデータ処理クラス
+class ReleaseManager {
+  private data = releasesData;
+
+  getCurrentVersion(): string {
+    return this.data.currentVersion;
   }
-];
+
+  getAllReleases(): ReleaseNoteWithNew[] {
+    return this.data.releases.map((note, _index) => ({
+      ...note,
+      isNew: note.version === this.data.currentVersion
+    }));
+  }
+
+  getLatestRelease(): ReleaseNoteWithNew | null {
+    const releases = this.getAllReleases();
+    return releases.length > 0 ? releases[0] : null;
+  }
+
+  hasUnreadReleases(lastSeenVersion: string | null): boolean {
+    if (!lastSeenVersion) return true;
+    return lastSeenVersion !== this.data.currentVersion;
+  }
+}
+
+// シングルトンインスタンス
+const releaseManager = new ReleaseManager();
 
 const ReleaseNotesDialog: React.FC<ReleaseNotesDialogProps> = ({
   isOpen,
   onClose
 }) => {
-  const [expandedVersions, setExpandedVersions] = React.useState<Set<string>>(new Set(['v1.2.0']));
+    const releases = releaseManager.getAllReleases();
+    const latestVersion = releaseManager.getCurrentVersion();
+  const [expandedVersions, setExpandedVersions] = React.useState<Set<string>>(new Set([latestVersion]));
 
   const toggleExpanded = (version: string) => {
     const newExpanded = new Set(expandedVersions);
@@ -115,7 +109,7 @@ const ReleaseNotesDialog: React.FC<ReleaseNotesDialogProps> = ({
               }}
             />
             <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
-              お知らせ
+              お知らせ・更新
             </h2>
           </div>
           <button
@@ -141,7 +135,7 @@ const ReleaseNotesDialog: React.FC<ReleaseNotesDialogProps> = ({
             maxHeight: 'calc(80vh - 80px)'
           }}
         >
-          {RELEASE_NOTES.map((note) => (
+          {releases.map((note) => (
             <div
               key={note.version}
               style={{
@@ -174,7 +168,7 @@ const ReleaseNotesDialog: React.FC<ReleaseNotesDialogProps> = ({
                       }}
                     />
                   )}
-                  <span style={{ fontWeight: '600', color: '#1f2937' }}>
+                  <span style={{ fontWeight: '600', color: '#1f2937', fontSize: '14px' }}>
                     {note.version}
                   </span>
                   <span style={{ color: '#6b7280', fontSize: '14px' }}>
@@ -210,4 +204,5 @@ const ReleaseNotesDialog: React.FC<ReleaseNotesDialogProps> = ({
   );
 };
 
+export {releaseManager};
 export default ReleaseNotesDialog;

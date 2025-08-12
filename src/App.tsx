@@ -7,15 +7,18 @@ import {db} from './db/database.ts'
 // Components (統合後のコンポーネントを使用)
 import FloatingHeader from './components/FloatingHeader';
 import FloatingFooter from './components/FloatingFooter';
-import StickyNote from './components/StickyNote'; // 統合版を使用
+import StickyNote from './components/StickyNote';
 import SearchNavigation from './components/SearchNavigation';
 import NoteEditorOverlay from './components/NoteEditorOverlay';
 import AboutDialog from './components/AboutDialog';
-import WhiteboardSelector from './components/WhiteboardSelector'; //  新規追加
+import WhiteboardSelector from './components/WhiteboardSelector';
 import WelcomeDialog from './components/WelcomeDialog.tsx';
 import PWAInstallDialog from './components/PWAInstallDialog.tsx';
 import TermsDialog from './components/TermsDialog.tsx';
-import ReleaseNotesDialog from './components/ReleaseNotesDialog.tsx';
+import ReleaseNotesDialog, { releaseManager } from './components/ReleaseNotesDialog.tsx';
+import WhiteboardGridView from './components/WhiteboardGridView.tsx';
+import LicenseNotices from './components/LicenseNotices.tsx';
+
 
 // Custom Hooks
 import { useCanvasOperations } from './hooks/useCanvasOperations';
@@ -27,9 +30,8 @@ import { useUnifiedTouchManager } from './hooks/useUnifiedTouchManager';
 
 // Types
 import type { AppMode } from './types';
-//import { NotesService } from './db/database';
-import WhiteboardGridView from './components/WhiteboardGridView.tsx';
-import LicenseNotices from './components/LicenseNotices.tsx';
+
+//Vercelのサービス
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -132,16 +134,19 @@ const handleShowTerms = useCallback(() =>{
 
 //リロード
 useEffect(() => {
-  const CURRENT_VERSION = "1.0.0";
   const LAST_SEEN_VERSION_KEY = "lastSeenReleaseVersion"
-
   const lastSeenVersion = localStorage.getItem(LAST_SEEN_VERSION_KEY);
   
-  if (lastSeenVersion != CURRENT_VERSION){
-    setHasUnreadReleaseNotes(true); //現在のバージョン（最新）と
-  }else{
-    setHasUnreadReleaseNotes(false);
-  }
+  const currentVersion = releaseManager.getCurrentVersion();
+  const hasUnRead = releaseManager.hasUnreadReleases(lastSeenVersion);
+  
+  setHasUnreadReleaseNotes(hasUnRead);
+
+console.log('バージョンチェック:',{
+  currentVersion,
+  lastSeenVersion,
+  hasUnRead
+});
 
   if (!whiteboardManager.isLoading && 
       whiteboardManager.currentBoardId && 
@@ -289,8 +294,8 @@ useEffect(() => {
       case 'showReleaseNotes':
         setShowReleaseNotes(true);
         setHasUnreadReleaseNotes(false); //リリースノートを開いたときに未読フラグをfalseに
-        const CURRENT_VERSION = "1.0.0";
-        localStorage.setItem("lastSeenReleaseVersion", CURRENT_VERSION) //ローカルストレージに最新バージョンを記録
+        const currentVersion = releaseManager.getCurrentVersion();
+        localStorage.setItem("lastSeenReleaseVersion", currentVersion) //ローカルストレージに最新バージョンを記録
         break;
 
       case 'showAbout':
@@ -767,7 +772,7 @@ if (showBoardSelector) {
         onClose={() => setShowReleaseNotes(false)}
       />
       )}
-      
+
       <LicenseNotices
         isOpen={showLicenseDialog}
         onClose={() => setShowLicenseDialog(false)}
