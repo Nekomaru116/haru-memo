@@ -288,6 +288,7 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 <CodeXml size ={16} />
                 ライセンス
               </button>
+              </div>
               
               {/*ボタン二行目 */}
               <div style={{ display: 'flex', gap: '12px'}}>
@@ -334,7 +335,6 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 GitHub
               </button>
               </div>
-            </div>
             </div>
           </div>
         </div>

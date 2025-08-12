@@ -7,35 +7,39 @@ import {db} from './db/database.ts'
 // Components (統合後のコンポーネントを使用)
 import FloatingHeader from './components/FloatingHeader';
 import FloatingFooter from './components/FloatingFooter';
-import StickyNote from './components/StickyNote'; // 統合版を使用
+import StickyNote from './components/StickyNote';
 import SearchNavigation from './components/SearchNavigation';
 import NoteEditorOverlay from './components/NoteEditorOverlay';
 import AboutDialog from './components/AboutDialog';
-import WhiteboardSelector from './components/WhiteboardSelector'; // 🔧 新規追加
+import WhiteboardSelector from './components/WhiteboardSelector';
 import WelcomeDialog from './components/WelcomeDialog.tsx';
 import PWAInstallDialog from './components/PWAInstallDialog.tsx';
 import TermsDialog from './components/TermsDialog.tsx';
+import ReleaseNotesDialog, { releaseManager } from './components/ReleaseNotesDialog.tsx';
+import WhiteboardGridView from './components/WhiteboardGridView.tsx';
+import LicenseNotices from './components/LicenseNotices.tsx';
+
+
 // Custom Hooks
 import { useCanvasOperations } from './hooks/useCanvasOperations';
 import { useNotesManager } from './hooks/useNotesManager';
 import { useDrawingEngine } from './hooks/useDrawingEngine';
 import { useSearchManager } from './hooks/useSearchManager';
-import { useWhiteboardManager } from './hooks/useWhiteboardManager'; // 🔧 新規追加
+import { useWhiteboardManager } from './hooks/useWhiteboardManager'; //  新規追加
 import { useUnifiedTouchManager } from './hooks/useUnifiedTouchManager';
 
 // Types
 import type { AppMode } from './types';
-//import { NotesService } from './db/database';
-import WhiteboardGridView from './components/WhiteboardGridView.tsx';
-import LicenseNotices from './components/LicenseNotices.tsx';
+
+//Vercelのサービス
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   // アプリケーション状態
   const [appMode, setAppMode] = useState<AppMode>('note');
-  const [showBoardSelector, setShowBoardSelector] = useState(false); // 🔧 新規追加
-  const [boardSelectorMode, setBoardSelectorMode] = useState<'stack' | 'grid'>('stack'); // 🔧 新規追加
+  const [showBoardSelector, setShowBoardSelector] = useState(false); //  新規追加
+  const [boardSelectorMode, setBoardSelectorMode] = useState<'stack' | 'grid'>('stack'); //  新規追加
   
   // デバッグモードと「このアプリについて」ダイアログの状態
   const [isDebugMode, setIsDebugMode] = useState(false);
@@ -43,10 +47,12 @@ function App() {
   const [showPWADialog, setShowPWADialog] = useState(false);
   const [showLicenseDialog, setShowLicenseDialog] = useState(false);
   const [onShowTermsDialog, setShowTermsDialog] = useState(false);
+  const [showReleaseNotes, setShowReleaseNotes] = useState(false);
+  const [hasUnreadReleaseNotes, setHasUnreadReleaseNotes] = useState(false);
 
   // ウェルカムダイアログの状態管理
   const [showWelcomeDialog, setShowWelcomeDialog] = useState(() => {
-  // 🔧 修正：welcome_completed フラグがない場合は必ず表示
+  //  修正：welcome_completed フラグがない場合は必ず表示
   const completed = localStorage.getItem('welcome_completed');
   console.log('🔍 ウェルカムダイアログ表示判定:', { completed, shouldShow: !completed });
   return !completed;
@@ -55,7 +61,7 @@ function App() {
   // Refs
   const stageRef = useRef<any>(null);
 
-  // 🔧 新規追加：ホワイトボード管理フック
+  //  新規追加：ホワイトボード管理フック
   const whiteboardManager = useWhiteboardManager();
 
   // カスタムフック群（マルチボード対応）
@@ -65,8 +71,8 @@ function App() {
     canvasOps.canvasState,
     canvasOps.screenSize,
     canvasOps.animationFunctions.animateCanvasTo,
-    whiteboardManager.currentBoardId, // 🔧 修正：currentBoardIdを追加
-    (reason: string) => saveCurrentBoardState(reason) // 🔧 新規追加：付箋操作時の保存
+    whiteboardManager.currentBoardId, //  修正：currentBoardIdを追加
+    (reason: string) => saveCurrentBoardState(reason) //  新規追加：付箋操作時の保存
   );
 
   const drawingEngine = useDrawingEngine(
@@ -74,7 +80,7 @@ function App() {
     canvasOps.canvasState,
     notesManager.editingNote,
     false, // searchManager.searchState.isActive - 後で調整
-    whiteboardManager.currentBoardId // 🔧 修正：currentBoardIdを追加
+    whiteboardManager.currentBoardId //  修正：currentBoardIdを追加
   );
 
   const searchManager = useSearchManager(
@@ -82,7 +88,7 @@ function App() {
     canvasOps.screenSize,
     canvasOps.animationFunctions.animateCanvasTo,
     notesManager.animateNotesTo,
-    whiteboardManager.currentBoardId // 🔧 修正：currentBoardIdを追加
+    whiteboardManager.currentBoardId //  修正：currentBoardIdを追加
   );
 
   const unifiedTouch = useUnifiedTouchManager({
@@ -92,7 +98,7 @@ function App() {
     canvasState: canvasOps.canvasState,
     onCanvasStateChange: canvasOps.updateCanvasState,
     drawingHandlers: drawingEngine.drawingEventHandlers,
-    onCanvasStateChangeEnd: (reason: string) => saveCurrentBoardState(reason), // 🔧 新規追加：変更完了時の保存
+    onCanvasStateChangeEnd: (reason: string) => saveCurrentBoardState(reason), //  新規追加：変更完了時の保存
   });
 
   // ウェルカムダイアログのハンドラー
@@ -126,9 +132,22 @@ const handleShowTerms = useCallback(() =>{
 }, []);
 
 
-//エレガントリロード
-// 🔧 修正：エレガントな初期化完了監視
+//リロード
 useEffect(() => {
+  const LAST_SEEN_VERSION_KEY = "lastSeenReleaseVersion"
+  const lastSeenVersion = localStorage.getItem(LAST_SEEN_VERSION_KEY);
+  
+  const currentVersion = releaseManager.getCurrentVersion();
+  const hasUnRead = releaseManager.hasUnreadReleases(lastSeenVersion);
+  
+  setHasUnreadReleaseNotes(hasUnRead);
+
+console.log('バージョンチェック:',{
+  currentVersion,
+  lastSeenVersion,
+  hasUnRead
+});
+
   if (!whiteboardManager.isLoading && 
       whiteboardManager.currentBoardId && 
       !showWelcomeDialog) {
@@ -175,7 +194,7 @@ useEffect(() => {
     }
   }, []);
 
-  // 🔧 新規追加：ボード切り替え処理
+  //  新規追加：ボード切り替え処理
   const handleBoardSwitch = useCallback(async (boardId: string) => {
     try {
       console.log('🔄 ボード切り替え開始:', boardId);
@@ -201,7 +220,7 @@ useEffect(() => {
     }
   }, [whiteboardManager, canvasOps]);
 
-  // 🔧 修正：キャンバス状態の保存（変更時のみ）
+  //  修正：キャンバス状態の保存（変更時のみ）
   const saveCurrentBoardState = useCallback(async (reason?: string) => {
     if (whiteboardManager.currentBoardId) {
       try {
@@ -216,14 +235,6 @@ useEffect(() => {
       }
     }
   }, [whiteboardManager, canvasOps.canvasState]);
-
-  // 🔧 削除：常時監視のuseEffectを削除
-  // React.useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     saveCurrentBoardState();
-  //   }, 3000);
-  //   return () => clearTimeout(timeoutId);
-  // }, [canvasOps.canvasState, saveCurrentBoardState]);
 
   // ユーティリティ関数
   const clearAllData = useCallback(async () => {
@@ -241,23 +252,8 @@ useEffect(() => {
     }
   }, [notesManager, drawingEngine]);
 
-  // キャンバス状態リセット（デバッグ用）
-  /*
-  const resetCanvasState = useCallback(async () => {
-    if (confirm('キャンバス位置をリセットしますか？')) {
-      try {
-        await NotesService.resetCanvasState();
-        canvasOps.resetView();
-        alert('キャンバス状態をリセットしました');
-      } catch (error) {
-        console.error('リセットエラー:', error);
-        alert('リセットに失敗しました');
-      }
-    }
-  }, [canvasOps]);
-  */
   // ヘッダーメニューアクション
-  const handleMenuAction = useCallback((action: 'list' | 'create' | 'rename' | 'showAbout' | 'resetPosition' | 'clearAllNotes' | 'clearAllLines' | 'delete') => {
+  const handleMenuAction = useCallback((action: 'list' | 'create' | 'rename' | 'showAbout' | 'resetPosition' | 'clearAllNotes' | 'clearAllLines' | 'delete' | 'showReleaseNotes') => {
     console.log('メニューアクション:', action);
     switch (action) {
       case 'list':
@@ -265,7 +261,7 @@ useEffect(() => {
         // TODO: ボード一覧の実装
         break;
       case 'create':
-        // 🔧 修正：新規ボード作成
+        //  修正：新規ボード作成
         const newBoardName = prompt('新しいホワイトボードの名前を入力してください:');
         if (newBoardName && newBoardName.trim()) {
           whiteboardManager.createBoard(newBoardName.trim())
@@ -279,7 +275,7 @@ useEffect(() => {
         }
         break;
       case 'rename':
-        // 🔧 修正：現在のボード名変更
+        //  修正：現在のボード名変更
         if (whiteboardManager.currentBoard) {
           const newName = prompt('新しい名前を入力してください:', whiteboardManager.currentBoard.name);
           if (newName && newName.trim()) {
@@ -295,6 +291,13 @@ useEffect(() => {
         }
         break;
         
+      case 'showReleaseNotes':
+        setShowReleaseNotes(true);
+        setHasUnreadReleaseNotes(false); //リリースノートを開いたときに未読フラグをfalseに
+        const currentVersion = releaseManager.getCurrentVersion();
+        localStorage.setItem("lastSeenReleaseVersion", currentVersion) //ローカルストレージに最新バージョンを記録
+        break;
+
       case 'showAbout':
         setShowAboutDialog(true);
         break;
@@ -304,7 +307,7 @@ useEffect(() => {
         break;
       
       case 'delete':
-        // 🔧 修正：現在のボード削除
+        //  修正：現在のボード削除
         if (whiteboardManager.currentBoard) {
           if (confirm(`「${whiteboardManager.currentBoard.name}」を削除しますか？\n※関連する付箋・描画も全て削除されます。`)) {
             whiteboardManager.deleteBoard(whiteboardManager.currentBoardId!)
@@ -332,6 +335,7 @@ useEffect(() => {
         break;
     }
   }, [whiteboardManager, canvasOps, notesManager, drawingEngine]);
+
   // 新規追加：ライセンス表示ハンドラー
   const handleShowLicenses = useCallback(() => {
     setShowAboutDialog(false); // AboutDialogを閉じる
@@ -344,7 +348,7 @@ useEffect(() => {
   }, [])
 
 
-  // 🔧 修正：ボード選択画面表示
+  //  修正：ボード選択画面表示
   const handleBoardListToggle = useCallback(() => {
     console.log('🗂️ ボード選択画面を開く');
     setShowBoardSelector(true);
@@ -569,7 +573,7 @@ useEffect(() => {
     );
   }
 
-// 🔧 修正後（条件分岐で適切に振り分け）
+
 if (showBoardSelector) {
   if (boardSelectorMode === 'grid') {
     // グリッドモード：WhiteboardGridViewを直接呼び出し
@@ -667,6 +671,7 @@ if (showBoardSelector) {
         currentSearchIndex={searchManager.searchState.currentIndex}
         onBoardListToggle={handleBoardListToggle}
         onMenuAction={handleMenuAction}
+        hasUnreadReleaseNotes={hasUnreadReleaseNotes}
       />
 
       {/* フローティングフッター */}
@@ -759,7 +764,14 @@ if (showBoardSelector) {
             onShowLicenses={handleShowLicenses}
             onShowPWAInstall = {handleShowPWAInstall}
             onShowTerms= {handleShowTerms}
-            />
+      />
+      {/* 他のダイアログ（AboutDialog、WelcomeDialogなど）と同じ場所に追加 */}
+      {showReleaseNotes && (
+      <ReleaseNotesDialog
+        isOpen={showReleaseNotes}
+        onClose={() => setShowReleaseNotes(false)}
+      />
+      )}
 
       <LicenseNotices
         isOpen={showLicenseDialog}
