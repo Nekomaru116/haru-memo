@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import AppIcon from './AppIcon'
-import { X, Heart, Twitter, CodeXml, Download, ScrollText } from 'lucide-react';
+import { X, Heart, Twitter, CodeXml, Download, ScrollText, Github } from 'lucide-react';
 // LicenseNotices のインポートを削除
 
 interface AboutDialogProps {
@@ -240,10 +240,11 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
               fontSize: '14px'
             }}>
               <Heart size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
-              作成者: ｵﾃﾃﾔﾜﾗｶｶﾆ & Claude
+              作成者: ｵﾃﾃﾔﾜﾗｶｶﾆ
             </p>
             
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '12px'}}>
               <button
                 onClick={onShowTerms} // 🔧 修正：親コンポーネントのコールバックを呼び出し
                 style={{
@@ -287,7 +288,9 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 <CodeXml size ={16} />
                 ライセンス
               </button>
-              
+              <br />
+              {/*ボタン二行目 */}
+              <div style={{ display: 'flex', gap: '12px'}}>
               <button
                 style={{
                   display: 'flex',
@@ -309,6 +312,29 @@ const AboutDialog: React.FC<AboutDialogProps> = ({
                 <Twitter size={16} />
                 X
               </button>
+              <button
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '8px 16px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '8px',
+                  background: 'white',
+                  color: '#555',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
+                onClick={() => window.open('https://github.com/Nekomaru116/haru-memo', '_blank')}
+              >
+                <Github size={16} />
+                GitHub
+              </button>
+              </div>
+            </div>
             </div>
           </div>
         </div>
