@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, Search, Layers, Edit3, Trash2, Eraser, BookmarkX, RefreshCcw, Info } from 'lucide-react'; // ★SVGアイコンをインポート
+import { Menu, Search, Layers, Edit3, Trash2, Eraser, BookmarkX, RefreshCcw, Info, Bell } from 'lucide-react'; // ★SVGアイコンをインポート
 import { sanitizeBoardName, /*sanitizeSearchQuery*/} from '../utils/sanitize'
 
 interface FloatingHeaderProps {
@@ -10,7 +10,8 @@ interface FloatingHeaderProps {
   searchResultCount: number;
   currentSearchIndex: number;
   onBoardListToggle: () => void;
-  onMenuAction: (action: 'rename' | 'showAbout' | 'resetPosition' | 'clearAllNotes' | 'clearAllLines' | 'delete') => void;
+  onMenuAction: (action: 'rename' | 'showAbout' | 'resetPosition' | 'clearAllNotes' | 'clearAllLines' | 'delete' | 'showReleaseNotes') => void;
+  hasUnreadReleaseNotes?: boolean;
 }
 
 const FloatingHeader: React.FC<FloatingHeaderProps> = ({
@@ -21,7 +22,8 @@ const FloatingHeader: React.FC<FloatingHeaderProps> = ({
   searchResultCount: _searchResultCount, //未使用
   currentSearchIndex: _currentSearchIndex, //未使用
   onBoardListToggle,
-  onMenuAction
+  onMenuAction,
+  hasUnreadReleaseNotes = false
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showSearchField, setShowSearchField] = useState(false);
@@ -137,7 +139,7 @@ useEffect(() => {
     }
   };
 
-  const handleMenuClick = (action: 'rename' | 'showAbout' | 'resetPosition' | 'clearAllNotes' | 'clearAllLines' |'delete') => {
+  const handleMenuClick = (action: 'rename' | 'showAbout' | 'resetPosition' | 'clearAllNotes' | 'clearAllLines' |'delete' | 'showReleaseNotes') => {
     onMenuAction(action);
     setShowMenu(false);
   };
@@ -192,8 +194,23 @@ useEffect(() => {
           {/* ★SVGアイコンに変更 */}
           <Menu size={20} color={showMenu ? '#FFF' : '#333'} />
          
+          {/* ハンバーガーメニューの赤点 */}
+          {hasUnreadReleaseNotes && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '8px',
+                right: '8px',
+                width: '8px',
+                height: '8px',
+                backgroundColor: '#ef4444',
+                borderRadius: '50%',
+                border: '1px solid white'
+              }}
+            />
+          )}
         </button>
-
+          
         {/* ハンバーガーメニュードロップダウン */}
         {showMenu && (
           <div
@@ -233,6 +250,43 @@ useEffect(() => {
             >
               <Edit3 size={16} />
               ボード名の変更
+            </button>
+            <button
+              onClick={() => handleMenuClick('showReleaseNotes')}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: 'none',
+                background: 'transparent',
+                color: '#333',
+                fontSize: '14px',
+                textAlign: 'left',
+                cursor: 'pointer',
+                borderRadius: '8px',
+                transition: 'background 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(205, 205, 205, 0.37)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            >
+              <Bell size={16} />
+              お知らせ
+
+            {/* お知らせボタンの赤点 */}
+              {hasUnreadReleaseNotes && (
+                <div
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    backgroundColor: '#ef4444',
+                    borderRadius: '50%',
+                    marginLeft: 'auto'
+                  }}
+                />
+              )}
+
             </button>
             <button
                 onClick={() => handleMenuClick('showAbout')}
