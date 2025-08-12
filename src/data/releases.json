@@ -2,6 +2,14 @@
   "currentVersion": "v1.1.0",
   "releases": [
     {
+     "version": "v1.1.1",
+     "date": "2025-08-14",
+     "changes": [
+        "テスト",
+        "hogehoge"
+     ]
+    },
+    {
       "version": "v1.1.0",
       "date": "2025-08-13",
       "changes": [
