@@ -151,6 +151,7 @@ console.log('バージョンチェック:',{
   if (!whiteboardManager.isLoading && 
       whiteboardManager.currentBoardId && 
       !showWelcomeDialog) {
+        
     
     const shouldCreateTutorial = localStorage.getItem('should_create_tutorial') === 'true';
     console.log('🔍 チュートリアル作成チェック:', {
